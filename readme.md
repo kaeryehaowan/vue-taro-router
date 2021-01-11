@@ -1,6 +1,6 @@
 ### VueTaroRouter
 
-基本 Taro 的路由方法，扩展成 vue-router 的使用体验
+基本 Taro ，扩展成 vue-router 的使用体验
 
 ### Installation
 
@@ -8,7 +8,7 @@
 
 ```js
 // router.js
-import VueTaroRouter from "@xsyx/taro-router";
+import VueTaroRouter from "@xsyx/vue-taro-router";
 const router = new VueTaroRouter();
 
 // 添加拦截器

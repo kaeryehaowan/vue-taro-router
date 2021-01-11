@@ -13,19 +13,15 @@ import { isFn, isStr } from "./utlis";
 import qs from "qs";
 
 class VueTaroRouter {
-  // 路由前置拦截器
-  [beforeEachs] = [];
-  // 路由后置拦截器
-  [afterEachs] = [];
-  // tabbar列表，用于区分调用 navigationTo 还是 switchTab
-  [tabbarList] = [];
-  [to] = null;
-  [from] = null;
-
   constructor({ beforeEachs = [], afterEachs = [], tabbarList = [] } = {}) {
+    // 路由前置拦截器
     this[beforeEachs] = beforeEachs;
+    // 路由后置拦截器
     this[afterEachs] = afterEachs;
+    // tabbar列表，用于区分调用 navigationTo 还是 switchTab
     this[tabbarList] = tabbarList;
+    this[to] = null
+    this[from] = null
   }
   // 设置前置拦截器
   beforeEach(fn) {
