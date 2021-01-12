@@ -1,27 +1,28 @@
 import {
-  goto,
-  beforeEachs,
-  afterEachs,
-  to,
-  from,
-  runHooks,
-  calcFrom,
-  runSyncHooks,
-  tabbarList
+  GOTO,
+  BEFORE_EACHS,
+  AFTER_EACHS,
+  TO,
+  FROM,
+  RUN_HOOKS,
+  CALC_FROM,
+  RUN_SYNC_HOOKS,
+  TABBAR_LIST,
 } from "./constants";
 import { isFn, isStr } from "./utlis";
 import qs from "qs";
+import Taro from '@tarojs/taro';
 
 class VueTaroRouter {
   constructor({ beforeEachs = [], afterEachs = [], tabbarList = [] } = {}) {
     // 路由前置拦截器
-    this[beforeEachs] = beforeEachs;
+    this[BEFORE_EACHS] = beforeEachs;
     // 路由后置拦截器
-    this[afterEachs] = afterEachs;
+    this[AFTER_EACHS] = afterEachs;
     // tabbar列表，用于区分调用 navigationTo 还是 switchTab
-    this[tabbarList] = tabbarList;
-    this[to] = null
-    this[from] = null
+    this[TABBAR_LIST] = tabbarList;
+    this[TO] = null
+    this[FROM] = null
   }
   // 设置前置拦截器
   beforeEach(fn) {
@@ -30,7 +31,7 @@ class VueTaroRouter {
         `[@xsyx/taro-router-vue]: beforeEach should provide function but got ${fn}`
       );
     }
-    this[beforeEachs].push(fn);
+    this[BEFORE_EACHS].push(fn);
     return this;
   }
   // 设置后置拦截器
@@ -40,18 +41,18 @@ class VueTaroRouter {
         `[@xsyx/taro-router-vue]: afterEach should provide function but got ${fn}`
       );
     }
-    this[afterEachs].push(fn);
+    this[AFTER_EACHS].push(fn);
     return this;
   }
   // 串行执行 hook
-  [runHooks](fns, done) {
+  [RUN_HOOKS](fns, done) {
     const hooksCount = fns.length;
     let i = 0;
     const next = () => {
-      fns[i++](this[to], this[from], location => {
+      fns[i++](this[TO], this[FROM], location => {
         if (location) {
           // 如果在拦截器的next有参，则重新跳转
-          this[goto](location);
+          this[GOTO](location);
         } else {
           if (i < hooksCount) {
             // 拦截器还未全部执行完
@@ -66,12 +67,12 @@ class VueTaroRouter {
     next();
   }
   // 并行执行 hook
-  [runSyncHooks](fns) {
+  [RUN_SYNC_HOOKS](fns) {
     fns.forEach(fn => {
-      fn(this[to], this[from]);
+      fn(this[TO], this[FROM]);
     });
   }
-  [goto](location, type='navigateTo') {
+  [GOTO](location, type='navigateTo') {
     if (!isStr(location.path)) {
       throw new Error(
         `[@xsyx/taro-router-vue]: path should provide string but got ${location.path}`
@@ -82,7 +83,7 @@ class VueTaroRouter {
       throw new Error(`[@xsyx/taro-router-vue]: path is not defined`);
     }
     // 更新from
-    this[from] = this[calcFrom]();
+    this[FROM] = this[CALC_FROM]();
     // 更新to
     let toPath,_toQuery,_toPathQuery,toQuery;
     if (isBack) {
@@ -105,7 +106,7 @@ class VueTaroRouter {
       JSON.stringify(location.query ? location.query : {})
     );
     toQuery = { ..._toQuery, ...qs.parse(_toPathQuery) };
-    this[to] = Object.assign({}, location, {
+    this[TO] = Object.assign({}, location, {
       path: toPath,
       query: toQuery,
       fullPath: `${toPath}${qs.stringify(toQuery) ? "?" : ""}${qs.stringify(
@@ -113,11 +114,11 @@ class VueTaroRouter {
       )}`
     });
     // 执行hooks
-    this[runHooks](this[beforeEachs], () => {
-      wx[type](
-        Object.assign({ url: this[to].fullPath }, location, {
+    this[RUN_HOOKS](this[BEFORE_EACHS], () => {
+      Taro[type](
+        Object.assign({ url: this[TO].fullPath }, location, {
           complete: () => {
-            this[runSyncHooks](this[afterEachs]);
+            this[RUN_SYNC_HOOKS](this[AFTER_EACHS]);
             location.complete && location.complete();
           },
           
@@ -126,7 +127,7 @@ class VueTaroRouter {
     });
   }
   // 获取当前location
-  [calcFrom]() {
+  [CALC_FROM]() {
     // 得到页面栈
     const pageStack = getCurrentPages();
     const lastPage = pageStack[pageStack.length - 1];
@@ -143,29 +144,29 @@ class VueTaroRouter {
   }
 
   push(location) {
-    this[goto](location, "navigateTo");
+    this[GOTO](location, "navigateTo");
   }
   replace(location) {
-    this[goto](location, "redirectTo");
+    this[GOTO](location, "redirectTo");
   }
   goBack(location) {
-    this[goto](location, "navigateBack");
+    this[GOTO](location, "navigateBack");
   }
   relaunch(location) {
-    this[goto](location, "reLaunch");
+    this[GOTO](location, "reLaunch");
   }
   switchTab(location) {
-    this[goto](location, "switchTab");
+    this[GOTO](location, "switchTab");
   }
 
   get query() {
-    return this[calcFrom]().query
+    return this[CALC_FROM]().query
   }
   get path() {
-    return this[calcFrom]().path
+    return this[CALC_FROM]().path
   }
   get fullPath() {
-    return this[calcFrom]().fullPath
+    return this[CALC_FROM]().fullPath
   }
 
   install(Vue) {

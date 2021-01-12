@@ -17,6 +17,9 @@ module.exports = {
         modules: [ "node_modules","src" ],
         extensions: [ '.js',  '.json']
     },
+    externals: {
+        '@tarojs/taro': '@tarojs/taro'
+    },
     // mode: 'development'
     mode: 'production'
 };
