@@ -1,0 +1,33 @@
+{
+  "name": "@xsyx/vue-taro-router",
+  "version": "1.0.0",
+  "description": "基本 Taro ，扩展成 vue-router 的使用体验",
+  "main": "dist/bundle.js",
+  "files": [
+    "dist/bundle.js"
+  ],
+  "scripts": {
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@gitlab.xsyxsc.com:2222/xsfe-utils/vue-taro-router.git"
+  },
+  "keywords": [
+    "taro",
+    "router",
+    "vue",
+    "taro3"
+  ],
+  "author": "kael",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.12.3",
+    "webpack-cli": "^4.3.1"
+  },
+  "dependencies": {
+    "qs": "^6.9.4"
+  }
+}
