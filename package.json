@@ -1,6 +1,6 @@
 {
-  "name": "@xsyx/vue-taro-router",
-  "version": "1.0.0",
+  "name": "vue-taro-router",
+  "version": "1.0.3",
   "description": "基本 Taro ，扩展成 vue-router 的使用体验",
   "main": "dist/bundle.js",
   "files": [
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@gitlab.xsyxsc.com:2222/xsfe-utils/vue-taro-router.git"
+    "url": "git@github.com:kaeryehaowan/vue-taro-router.git"
   },
   "keywords": [
     "taro",
