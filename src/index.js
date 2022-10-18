@@ -169,8 +169,8 @@ class VueTaroRouter {
     return this[CALC_FROM]().fullPath
   }
 
-  install(Vue) {
-    Object.defineProperty(Vue.prototype, '$router', {value: this})
+  install(app) {
+    app.config.globalProperties.$router = this
   }
 }
 

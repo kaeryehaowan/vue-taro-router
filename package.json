@@ -1,6 +1,6 @@
 {
   "name": "vue-taro-router",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "基本 Taro ，扩展成 vue-router 的使用体验",
   "main": "dist/bundle.js",
   "files": [
@@ -16,7 +16,7 @@
   "keywords": [
     "taro",
     "router",
-    "vue",
+    "vue3",
     "taro3"
   ],
   "author": "kael",
